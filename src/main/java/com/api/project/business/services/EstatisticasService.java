@@ -18,11 +18,15 @@ public class EstatisticasService {
 
     public EstatisticasResponseDTO calcularEstatisticas(Integer intervaloBusca) {
         log.info("Calculando Estatisticas");
+        long start = System.currentTimeMillis();
         List<TransacaoRequestDTO> transacoes = transacaoService.buscarTransacao(intervaloBusca);
 
         DoubleSummaryStatistics estatisticasTransacoes = transacoes.stream()
                 .mapToDouble(TransacaoRequestDTO::valor)
                 .summaryStatistics();
+        long end = System.currentTimeMillis();
+        long  totalTime = end - start;
+        System.out.println("totalTime : " + totalTime);
         log.info("Estatisticas retornadas: {}", estatisticasTransacoes);
         return new EstatisticasResponseDTO(estatisticasTransacoes.getCount(),
                 estatisticasTransacoes.getSum(),
